@@ -29,11 +29,11 @@ namespace PTC.Commands
             return KeyboardExtended.Current.CurrentState.GetPressedKeys().Count() > 0;
         }
 
-        public static bool ChangeFromHighscoreToGameoverScene(GameTime time)
-        {
-            return MouseExtended.Current.WasSingleClick(MouseButton.Left);
-            //return KeyboardExtended.Current.CurrentState.GetPressedKeys().Count() > 0;
-        }
+        //public static bool ChangeFromHighscoreToGameoverScene(GameTime time)
+        //{
+        //    return MouseExtended.Current.WasSingleClick(MouseButton.Left);
+        //    //return KeyboardExtended.Current.CurrentState.GetPressedKeys().Count() > 0;
+        //}
 
         public static bool ToggleFullScreen(GameTime time)
         {

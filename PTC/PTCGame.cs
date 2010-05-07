@@ -22,7 +22,7 @@ namespace PTC
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PTCGame : Microsoft.Xna.Framework.Game
+    public class PTCGame : Game
     {
         GraphicsDeviceManager m_Graphics;
         SpriteBatch m_SpriteBatch;
@@ -91,7 +91,7 @@ namespace PTC
             scheduler.AddSceneChange(new SceneChange(welcomeScene, mainScene, CommandConditions.ChangeFromWelcomeToMainScene));
             scheduler.AddSceneChange(new SceneChange(mainScene, highScoreScene, time => CommandConditions.GameOverCheatCode(time) || (mainScene.IsGameOver() && Highscores.IsNewHighscore(CurrentPoints))));
             scheduler.AddSceneChange(new SceneChange(mainScene, gameOverScene, time => mainScene.IsGameOver() && !Highscores.IsNewHighscore(CurrentPoints)));
-            scheduler.AddSceneChange(new SceneChange(highScoreScene, gameOverScene, CommandConditions.ChangeFromHighscoreToGameoverScene));
+            scheduler.AddSceneChange(new SceneChange(highScoreScene, gameOverScene, highScoreScene.Finished));
             scheduler.AddSceneChange(new SceneChange(gameOverScene, welcomeScene, CommandConditions.ChangeFromGameOverToWelcomeScene));    
 
             Components.Add(mainScene);

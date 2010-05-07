@@ -20,7 +20,6 @@ namespace PTC.Text
         }
 
         private string m_Value = string.Empty;
-        private string m_VisibleValue = string.Empty;
         
         public string Value 
         {
@@ -28,20 +27,7 @@ namespace PTC.Text
             set 
             { 
                 m_Value = value;
-                if (VisibleValue == string.Empty)
-                {
-                    VisibleValue = value;
-                }
-            }
-        }
-
-        public string VisibleValue
-        {
-            get { return m_VisibleValue; }
-            set 
-            { 
-                m_VisibleValue = value;
-                SetText(value);
+                SetText(m_Value);
             }
         }
 
@@ -49,8 +35,13 @@ namespace PTC.Text
         {
             get
             {
-                return (m_CurrentFont.MeasureString(VisibleValue).Length() / 3);
+                return (m_CurrentFont.MeasureString(Value).Length() / 3);
             }
+        }
+
+        public Vector2 Position
+        {
+            get { return PositionTopLeft + (m_CurrentFont.MeasureString(Value) / 2); }
         }
 
     }

@@ -154,8 +154,9 @@ namespace PTC.Text
                     currentViewPort.Y = m_View.Y;
                     ThisGame.GraphicsDevice.Viewport = currentViewPort;
                 }
-                 
-                ThisGame.CurrentSpriteBatch.DrawString(font, texts[index], pos + offset + m_CurrentScrollPosition, color, 0F, Vector2.Zero,
+
+                m_PositionTopLeft = pos + offset + m_CurrentScrollPosition;
+                ThisGame.CurrentSpriteBatch.DrawString(font, texts[index], m_PositionTopLeft, color, 0F, Vector2.Zero,
                     Vector2.One, SpriteEffects.None, 0F);
 
                 if (m_View != Rectangle.Empty)
@@ -167,6 +168,12 @@ namespace PTC.Text
 
                 index++;
             }
+        }
+
+        private Vector2 m_PositionTopLeft;
+        protected Vector2 PositionTopLeft
+        {
+            get { return m_PositionTopLeft; }
         }
 
         private void Write(SpriteFont font, Color color, Color shadowColor, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va, params string[] texts)
