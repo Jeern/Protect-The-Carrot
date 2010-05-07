@@ -16,9 +16,11 @@ namespace PTC.Scenes
         private TextUtil m_Title;
         private TextUtil m_ChosenText;
         private const string m_ChosenTextStart = "________________________";
-        private string m_CurrentText = m_ChosenTextStart;
+        private string m_CurrentText = string.Empty;
 
         private Crosshair m_Crosshair;
+
+        private bool m_Finished = false;
 
         private List<HighscoreLetter> m_Letters = new List<HighscoreLetter>(30);
 
@@ -30,9 +32,13 @@ namespace PTC.Scenes
 
         public override void OnEnter()
         {
-            ThisGame.Highscores.Add(new HighScore() { Score = ThisGame.CurrentPoints, Name = "JESPER" });
-            ThisGame.Highscores.Save();
             m_Title.SetText("New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
+        }
+
+        public override void OnExit()
+        {
+            ThisGame.Highscores.Add(new HighScore() { Score = ThisGame.CurrentPoints, Name = m_CurrentText });
+            ThisGame.Highscores.Save();
         }
 
         protected override void LoadContent()
@@ -46,7 +52,7 @@ namespace PTC.Scenes
             AddComponent(m_Title);
             m_ChosenText = new TextUtil(ThisGame, FontMedium, Color.Black, Color.Blue, new Vector2(0, -70),
                 HorizontalAlignment.Center, VerticalAlignment.Center,
-                m_ChosenTextStart);
+                ChosenText);
             AddComponent(m_ChosenText);
             MakeLetterMesh(new Vector2(200, 350));
             m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
@@ -122,6 +128,12 @@ namespace PTC.Scenes
             DrawCrossHair(gameTime);
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            m_ChosenText.SetText(ChosenText);
+        }
+
         public void DrawCrossHair(GameTime time)
         {
             if (m_Crosshair.Visible)
@@ -134,10 +146,48 @@ namespace PTC.Scenes
         {
             foreach (HighscoreLetter letter in m_Letters)
             {
+                if ((m_Crosshair.Position - letter.Position).Length() < (letter.TouchDistance + m_Crosshair.TouchDistance))
+                {
+                    //Aha a letter is hit.
+                    ChangeText(letter);
+                    return;
+                }
             }
         }
 
+        public bool Finished(GameTime time)
+        {
+            return m_Finished;
+        }
 
-        
+        private void ChangeText(HighscoreLetter letter)
+        {
+            switch (letter.Value)
+            {
+                case "DEL":
+                    if (m_CurrentText.Length > 0)
+                    {
+                        m_CurrentText = m_CurrentText.Substring(0, m_CurrentText.Length - 1);
+                    }
+                    break;
+                case "CLEAR":
+                    m_CurrentText = string.Empty;
+                    break;
+                case "ENTER":
+                    m_Finished = true;
+                    break;
+                case "SPACE":
+                    m_CurrentText += " ";
+                    break;
+                default:
+                    m_CurrentText += letter.Value;
+                    break;
+            }
+        }
+
+        private string ChosenText
+        {
+            get { return (m_CurrentText + m_ChosenTextStart).Substring(0, m_ChosenTextStart.Length); }
+        }
     }
 }
