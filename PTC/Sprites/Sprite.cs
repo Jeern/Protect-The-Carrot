@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using System.Diagnostics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PTC.GraphicUtils;
 
@@ -121,7 +116,7 @@ namespace PTC.Sprites
 
         public virtual float Layer
         {
-            get { return 0; } // return Math.Min(ZScale, 1F); }
+            get { return 0; } 
         }
 
         public float Height

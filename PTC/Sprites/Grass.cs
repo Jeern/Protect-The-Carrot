@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PTC.GraphicUtils;
 
@@ -16,8 +12,6 @@ namespace PTC.Sprites
             : base(game, startPos)
         {
             Scale = 0.06F;
-            
-            //TheColor = Color.GreenYellow;
         }
 
         protected override GameState GetImage()
@@ -29,7 +23,7 @@ namespace PTC.Sprites
         {
             base.BaseDraw(gameTime);
             ThisGame.CurrentSpriteBatch.Draw(Image,
-               Position, // + Middle,
+               Position, 
                null,
                grassColor,
                0F,

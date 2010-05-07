@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using PTC.Utils;
-using PTC.Sprites;
 using Microsoft.Xna.Framework.Graphics;
+using PTC.Sprites;
 using PTC.Text;
+using PTC.Utils;
 
 namespace PTC.Scenes
 {

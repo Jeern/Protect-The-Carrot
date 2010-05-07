@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PTC.GraphicUtils;
 
@@ -28,7 +24,7 @@ namespace PTC.Sprites
         {
             base.BaseDraw(gameTime);
             ThisGame.CurrentSpriteBatch.Draw(Image,
-               Position, // + Middle,
+               Position, 
                null,
                TheColor,
                0F,

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PTC.Utils
 {
@@ -28,7 +25,7 @@ namespace PTC.Utils
 
         private X m_OriginalValue = default(X);
 
-        public X Value = default(X); // { get; set; } Because the nature of this class it cannot be a property
+        public X Value = default(X); 
 
         public static implicit operator X(Resetable<X> resetable)
         {

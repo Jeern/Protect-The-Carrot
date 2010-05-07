@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using PTC.Utils;
-using PTC.Sprites;
-using PTC.Particles;
-using System.Diagnostics;
-using PTC.Commands;
-using PTC.Text;
 using PTC.GraphicUtils;
+using PTC.Particles;
+using PTC.Sprites;
+using PTC.Text;
+using PTC.Utils;
 
 namespace PTC.Scenes
 {
@@ -339,10 +335,6 @@ namespace PTC.Scenes
         public override void Update(GameTime gameTime)
         {
             sceneTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //BackgroundColor = ColorShift(summerColor, shiftColorSummerAutumn, sceneTime, Seasons);
-            //15      
-
             if (sceneTime < secondsSeason)
             {
                
@@ -390,28 +382,9 @@ namespace PTC.Scenes
 
             }
 
-
-
             CheckForColision(gameTime);
-            //foreach (GameComponent  component in this.Components)
-            //{
-            //    if (component.Enabled)
-            //    
-
-            //        component.Update(gameTime);
-            //    }
-            //}
-
-            //Environment.UpdateSpeed(breaking, direction);
-
-            //if (CheckForColission(gameTime))
-            //{
-            //}
-
-            //m_Points += 0.01F * CurrentLevel * Environment.CurrentSpeed.Length() * m_Fire.Scale;
 
             UpdateAllComponents(gameTime);
-            //base.Update(gameTime);
             RemoveKilledRabbits(gameTime);
             RemoveOldBlood(gameTime);
             m_TextPoints.SetText(string.Format("Points: {0}", ThisGame.CurrentPoints));
@@ -428,8 +401,6 @@ namespace PTC.Scenes
                 }
             }
         }
-
-        //private TimeSpan m_LatestCollision = TimeSpan.MinValue;
 
         private bool CheckForColision(GameTime time)
         {
@@ -466,13 +437,11 @@ namespace PTC.Scenes
             MediaPlayer.IsRepeating = true; 
             MediaPlayer.Play(gameSong);
 
-            //BackgroundColor = summerColor;
             shiftColorSummerAutumn = ColorSubtract(summerColor, autumnColor);
             shiftColorAutumnWinter = ColorSubtract(autumnColor, winterColor);
             shiftColorWinterSpring = ColorSubtract(winterColor, springColor);
             shiftColorSpringSummer = ColorSubtract(springColor, summerColor);
 
-            // shiftColorSummerAutumn = ColorSubtract(summerColor, autumnColor);
             m_TextPoints = new TextUtil(ThisGame, FontMedium, Color.Violet, Color.Black, new Vector2(-10, 0), 
                 HorizontalAlignment.Right, VerticalAlignment.Top, string.Format("Points: {0}", ThisGame.CurrentPoints));
             m_TextSeason = new TextUtil(ThisGame, FontMedium, seasonTextColor, Color.Black, new Vector2(10, 0), 
