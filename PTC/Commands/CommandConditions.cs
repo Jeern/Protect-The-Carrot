@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
-using PTC.Input;
 using Microsoft.Xna.Framework.Input;
+using PTC.Input;
 
 namespace PTC.Commands
 {
@@ -28,12 +25,6 @@ namespace PTC.Commands
         {
             return KeyboardExtended.Current.CurrentState.GetPressedKeys().Count() > 0;
         }
-
-        //public static bool ChangeFromHighscoreToGameoverScene(GameTime time)
-        //{
-        //    return MouseExtended.Current.WasSingleClick(MouseButton.Left);
-        //    //return KeyboardExtended.Current.CurrentState.GetPressedKeys().Count() > 0;
-        //}
 
         public static bool ToggleFullScreen(GameTime time)
         {

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PTC.Utils;
 
 namespace PTC.Text
@@ -20,7 +18,6 @@ namespace PTC.Text
 
         private Rectangle m_View = Rectangle.Empty;
         private Resetable<Vector2> m_CurrentScrollPosition = new Resetable<Vector2>();
-        //private Vector2 m_CurrentScrollPosition = Vector2.Zero;
         private Vector2 m_ScrollSpeed;
         private bool m_Repeating = false;
         private bool m_UseShadow = false;
