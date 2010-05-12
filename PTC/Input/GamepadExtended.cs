@@ -77,7 +77,7 @@ namespace PTC.Input
             return state;
         }
 
-        private int ClickCount(Buttons checkButton)
+        private bool ClickCount(Buttons checkButton, int requiredCount)
         {
             bool buttonWasDown = false;
             int count = 0;
@@ -86,20 +86,22 @@ namespace PTC.Input
                 if (buttonWasDown && stateExt.State.IsButtonUp(checkButton))
                 {
                     count++;
+                    if (count >= requiredCount)
+                        return true;
                 }
                 buttonWasDown = stateExt.State.IsButtonUp(checkButton);
             }
-            return count;
+            return false;
         }
 
         public bool WasSingleClick(Buttons checkButton)
         {
-            return ClickCount(checkButton) > 0;
+            return ClickCount(checkButton, 1);
         }
 
         public bool WasDoubleClick(Buttons checkButton)
         {
-            return ClickCount(checkButton) > 1;
+            return ClickCount(checkButton, 2);
         }
     }
 }
