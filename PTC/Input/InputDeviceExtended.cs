@@ -48,7 +48,7 @@ namespace PTC.Input
             }
             if (state != null && state.StateTime < currentTime.TotalRealTime.Subtract(new TimeSpan(0, 0, 0, 0, InputDeviceConstants.ClickCountTimeMS)))
             {
-                m_RecordedStates.Dequeue();
+                m_StatesForReuse.Push(m_RecordedStates.Dequeue());
                 DequeueOldStates(currentTime);
             }
         }
