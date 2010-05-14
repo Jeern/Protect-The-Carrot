@@ -30,6 +30,7 @@ namespace PTC.Scenes
         public override void OnEnter()
         {
             m_Title.SetText("New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
+            m_CurrentText = ThisGame.Highscores.LatestHighscoreHolder;
         }
 
         public override void OnExit()
@@ -185,6 +186,11 @@ namespace PTC.Scenes
         private string ChosenText
         {
             get { return (m_CurrentText + m_ChosenTextStart).Substring(0, m_ChosenTextStart.Length); }
+        }
+
+        public override void Reset()
+        {
+            m_Finished = false;
         }
     }
 }

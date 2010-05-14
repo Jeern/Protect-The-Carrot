@@ -256,7 +256,7 @@ namespace PTC.Scenes
 
         public void DrawDust(GameTime time)
         {
-            
+
         }
 
         public void DrawSmoke(GameTime time)
@@ -294,7 +294,7 @@ namespace PTC.Scenes
             int red = (int)(en.R - to.R);
             int green = (int)(en.G - to.G);
             int blue = (int)(en.B - to.B);
-            
+
             return new Vector3(red, green, blue);
         }
 
@@ -326,7 +326,7 @@ namespace PTC.Scenes
 
             }
 
-            
+
             return new Color(start.R, start.G, start.B);
         }
 
@@ -337,11 +337,11 @@ namespace PTC.Scenes
             sceneTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (sceneTime < secondsSeason)
             {
-               
-                
+
+
                 BackgroundColor = ColorShift(summerColor, shiftColorSummerAutumn, sceneTime, Seasons.summer);
                 Grass.grassColor = BackgroundColor;
-                
+
             }
 
             else if (sceneTime >= secondsSeason && sceneTime < 2 * secondsSeason)
@@ -356,8 +356,8 @@ namespace PTC.Scenes
                 season = Seasons.winter;
                 BackgroundColor = ColorShift(winterColor, shiftColorWinterSpring, sceneTime, Seasons.winter);
                 Grass.grassColor = BackgroundColor;
-                
-                
+
+
 
             }
 
@@ -393,7 +393,7 @@ namespace PTC.Scenes
 
         private void UpdateAllComponents(GameTime time)
         {
-            for (int i = Components.Count-1 ; i >= 0; i--)
+            for (int i = Components.Count - 1; i >= 0; i--)
             {
                 if (Components[i].Enabled)
                 {
@@ -407,7 +407,7 @@ namespace PTC.Scenes
 
             foreach (Rabbit rabbit in m_Rabbits)
             {
-                if (!rabbit.IsDead && (rabbit.Position - rabbit.Target).Length() < rabbit.TouchDistance/2)
+                if (!rabbit.IsDead && (rabbit.Position - rabbit.Target).Length() < rabbit.TouchDistance / 2)
                 {
                     if (rabbit.Target == m_Carrot.Position)
                     {
@@ -434,7 +434,7 @@ namespace PTC.Scenes
             base.LoadContent();
 
             Song gameSong = ThisGame.Content.Load<Song>("PTC_theme");
-            MediaPlayer.IsRepeating = true; 
+            MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(gameSong);
 
             shiftColorSummerAutumn = ColorSubtract(summerColor, autumnColor);
@@ -442,9 +442,9 @@ namespace PTC.Scenes
             shiftColorWinterSpring = ColorSubtract(winterColor, springColor);
             shiftColorSpringSummer = ColorSubtract(springColor, summerColor);
 
-            m_TextPoints = new TextUtil(ThisGame, FontMedium, Color.Violet, Color.Black, new Vector2(-10, 0), 
+            m_TextPoints = new TextUtil(ThisGame, FontMedium, Color.Violet, Color.Black, new Vector2(-10, 0),
                 HorizontalAlignment.Right, VerticalAlignment.Top, string.Format("Points: {0}", ThisGame.CurrentPoints));
-            m_TextSeason = new TextUtil(ThisGame, FontMedium, seasonTextColor, Color.Black, new Vector2(10, 0), 
+            m_TextSeason = new TextUtil(ThisGame, FontMedium, seasonTextColor, Color.Black, new Vector2(10, 0),
                 HorizontalAlignment.Left, VerticalAlignment.Top, season.ToString());
 
         }
@@ -503,7 +503,7 @@ namespace PTC.Scenes
         private Vector2 GetRandomTarget(Vector2 notThisPosition)
         {
             //return m_holes[0].Position;
-            if (RealRandom.Create(0,2).Next() == 0)
+            if (RealRandom.Create(0, 2).Next() == 0)
             {
                 return m_Carrot.Position;
             }
@@ -528,14 +528,15 @@ namespace PTC.Scenes
                     rabbitToCheck.Position += new Vector2(RealRandom.Create(0, 20).Next() - 10, -RealRandom.Create(0, 8).Next());
 
                     if (!rabbitToCheck.IsDead)
-                    { KillRabbit(rabbitToCheck, e.Data); 
+                    {
+                        KillRabbit(rabbitToCheck, e.Data);
                     }
 
                     ThisGame.CurrentPoints += rabbitToCheck.PointsForKill;
                     rabbitToCheck.PointsForKill++;
-                        XACT.PlayerHit();
-                        
-                    
+                    XACT.PlayerHit();
+
+
                     SquirtBlood(rabbitToCheck.Position - new Vector2(0, -10), e.Data);
 
 
@@ -585,7 +586,7 @@ namespace PTC.Scenes
                 DeadObject = rabbitToKill,
                 TimeOfDeath = time.TotalGameTime
             });
-        
+
         }
 
         private void SquirtBlood(Vector2 position, GameTime time)
@@ -686,7 +687,7 @@ namespace PTC.Scenes
             shiftColorSummerAutumn = Vector3.Zero;
             shiftColorAutumnWinter = Vector3.Zero;
             shiftColorWinterSpring = Vector3.Zero;
-            shiftColorSpringSummer =  Vector3.Zero;
+            shiftColorSpringSummer = Vector3.Zero;
             blodPletter = new List<Blood>();
 
             m_MatingRabbits = new List<MatingRabbits>();
@@ -742,7 +743,7 @@ namespace PTC.Scenes
 
             ThisGame.CurrentPoints = 0;
 
-            
+
 
 
 

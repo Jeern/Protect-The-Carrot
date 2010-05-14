@@ -9,12 +9,13 @@ using System.Runtime.Serialization;
 
 namespace PTC.Utils
 {
+    [Serializable]
     public class HighscoreList
     {
         private const int Number = 10;
         private List<HighScore> m_Scores = new List<HighScore>(Number);
 
-        private const string File = @"PTCHighScoreD8C310B266204dd4B69EF0A65FCDF715.bin";
+        private const string File = @"PTCHighScoreD8C310B266204dd4B69EF0A65FCDF716.bin";
 
         private string m_LatestHighscoreHolder;
         public string LatestHighscoreHolder
@@ -44,24 +45,27 @@ namespace PTC.Utils
             using (var stream = new IsolatedStorageFileStream(File, FileMode.Truncate))
             {
                 var formatter = new BinaryFormatter();
-                formatter.Serialize(stream, m_Scores);
+                formatter.Serialize(stream, this);
                 stream.Flush();
             }
         }
 
-        public void Load()
+        public static HighscoreList Load()
         {
             try
             {
                 using (var stream = new IsolatedStorageFileStream(File, FileMode.OpenOrCreate))
                 {
                     var formatter = new BinaryFormatter();
-                    m_Scores = formatter.Deserialize(stream) as List<HighScore>;
+                    return formatter.Deserialize(stream) as HighscoreList;
                 }
             }
             catch (SerializationException)
             {
-                Save();
+                //The file probably does not exist yet
+                var highScores = new HighscoreList();
+                highScores.Save();
+                return highScores;
             }
         }
 
