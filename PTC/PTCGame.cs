@@ -89,7 +89,7 @@ namespace PTC
             Components.Add(scheduler);
             Components.Add(new Command(CommandNames.Exit, CommandConditions.Exit, CommandActions.Exit, this));
             Components.Add(new Command(CommandNames.ToggleFullScreen, CommandConditions.ToggleFullScreen, CommandActions.ToggleFullScreen, this));
-            Highscores.Load();
+            Highscores = HighscoreList.Load();
             base.LoadContent();
             XACT.StartSoundScape();
         }
@@ -162,6 +162,7 @@ namespace PTC
         public HighscoreList Highscores
         {
             get { return m_Highscores; }
+            set { m_Highscores = value; }
         }
 
     }
