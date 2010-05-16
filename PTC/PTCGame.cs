@@ -60,6 +60,12 @@ namespace PTC
             CommandConditions.Game = this;
         }
 
+        //Scenes
+        SceneScheduler m_Scheduler;
+        MainScene m_MainScene;
+        GameOverScene m_GameOverScene;
+        WelcomeScene m_WelcomeScene;
+        HighScoreScene m_HighScoreScene;
 
 
         /// <summary>
@@ -70,23 +76,23 @@ namespace PTC
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
-            var scheduler = new SceneScheduler(this);
-            var mainScene = new MainScene(this);
-            var gameOverScene = new GameOverScene(this);
-            var welcomeScene = new WelcomeScene(this);
-            var highScoreScene = new HighScoreScene(this);
+            m_Scheduler = new SceneScheduler(this);
+            m_MainScene = new MainScene(this);
+            m_GameOverScene = new GameOverScene(this);
+            m_WelcomeScene = new WelcomeScene(this);
+            m_HighScoreScene = new HighScoreScene(this);
 
-            scheduler.AddSceneChange(new SceneChange(welcomeScene, mainScene, CommandConditions.ChangeFromWelcomeToMainScene));
-            scheduler.AddSceneChange(new SceneChange(mainScene, highScoreScene, time => CommandConditions.GameOverCheatCode(time) || (mainScene.IsGameOver() && Highscores.IsNewHighscore(CurrentPoints))));
-            scheduler.AddSceneChange(new SceneChange(mainScene, gameOverScene, time => mainScene.IsGameOver() && !Highscores.IsNewHighscore(CurrentPoints)));
-            scheduler.AddSceneChange(new SceneChange(highScoreScene, gameOverScene, highScoreScene.Finished));
-            scheduler.AddSceneChange(new SceneChange(gameOverScene, welcomeScene, CommandConditions.ChangeFromGameOverToWelcomeScene));    
+            m_Scheduler.AddSceneChange(new SceneChange(m_WelcomeScene, m_MainScene, CommandConditions.ChangeFromWelcomeToMainScene));
+            m_Scheduler.AddSceneChange(new SceneChange(m_MainScene, m_HighScoreScene, time => CommandConditions.GameOverCheatCode(time) || (m_MainScene.IsGameOver() && Highscores.IsNewHighscore(CurrentPoints))));
+            m_Scheduler.AddSceneChange(new SceneChange(m_MainScene, m_GameOverScene, time => m_MainScene.IsGameOver() && !Highscores.IsNewHighscore(CurrentPoints)));
+            m_Scheduler.AddSceneChange(new SceneChange(m_HighScoreScene, m_GameOverScene, m_HighScoreScene.Finished));
+            m_Scheduler.AddSceneChange(new SceneChange(m_GameOverScene, m_WelcomeScene, CommandConditions.ChangeFromGameOverToWelcomeScene));    
 
-            Components.Add(mainScene);
-            Components.Add(gameOverScene);
-            Components.Add(highScoreScene);
-            Components.Add(welcomeScene);
-            Components.Add(scheduler);
+            Components.Add(m_MainScene);
+            Components.Add(m_GameOverScene);
+            Components.Add(m_HighScoreScene);
+            Components.Add(m_WelcomeScene);
+            Components.Add(m_Scheduler);
             Components.Add(new Command(CommandNames.Exit, CommandConditions.Exit, CommandActions.Exit, this));
             Components.Add(new Command(CommandNames.ToggleFullScreen, CommandConditions.ToggleFullScreen, CommandActions.ToggleFullScreen, this));
             Highscores = HighscoreList.Load();
