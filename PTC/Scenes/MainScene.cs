@@ -447,6 +447,11 @@ namespace PTC.Scenes
             m_TextSeason = new TextUtil(ThisGame, FontMedium, seasonTextColor, Color.Black, new Vector2(10, 0),
                 HorizontalAlignment.Left, VerticalAlignment.Top, season.ToString());
 
+            m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
+            AddComponentNoUpdate(m_Crosshair);
+            m_Crosshair.GunFired += CrosshairGunFired;
+
+
         }
         private void AddRabbit()
         {
@@ -695,7 +700,6 @@ namespace PTC.Scenes
             m_Points = 0F;
             m_CurrentLevel = 1;
             m_gunHeight = 450;
-            m_Crosshair = null;
             m_Grasses = new List<Grass>();
             m_Carrot = null;
             m_Rabbits = new List<Rabbit>();
@@ -737,17 +741,8 @@ namespace PTC.Scenes
                 AddComponentNoUpdate(fence);
             }
 
-            m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
-            AddComponentNoUpdate(m_Crosshair);
-            m_Crosshair.GunFired += CrosshairGunFired;
 
             ThisGame.CurrentPoints = 0;
-
-
-
-
-
         }
-
     }
 }
