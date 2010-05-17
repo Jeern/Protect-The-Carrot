@@ -9,8 +9,8 @@ namespace PTC.Text
         private SpriteFont m_CurrentFont;
 
         public HighscoreLetter(PTCGame game, SpriteFont font, Vector2 offset)
-            : base(game, font, Color.BlueViolet, Color.Black, offset,
-            HorizontalAlignment.Left, VerticalAlignment.Top, string.Empty)
+            : base(game, Vector2.Zero, font, Color.BlueViolet, Color.Black, offset,
+            HorizontalAlignment.Left, VerticalAlignment.Top)
         {
             m_CurrentFont = font;
         }

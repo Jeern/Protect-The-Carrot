@@ -442,10 +442,10 @@ namespace PTC.Scenes
             shiftColorWinterSpring = ColorSubtract(winterColor, springColor);
             shiftColorSpringSummer = ColorSubtract(springColor, summerColor);
 
-            m_TextPoints = new TextUtil(ThisGame, FontMedium, Color.Violet, Color.Black, new Vector2(-10, 0),
-                HorizontalAlignment.Right, VerticalAlignment.Top, string.Format("Points: {0}", ThisGame.CurrentPoints));
-            m_TextSeason = new TextUtil(ThisGame, FontMedium, seasonTextColor, Color.Black, new Vector2(10, 0),
-                HorizontalAlignment.Left, VerticalAlignment.Top, season.ToString());
+            m_TextPoints = new TextUtil(ThisGame, Vector2.Zero, FontMedium, Color.Violet, Color.Black, new Vector2(-10, 0),
+                HorizontalAlignment.Right, VerticalAlignment.Top);
+            m_TextSeason = new TextUtil(ThisGame, Vector2.Zero, FontMedium, seasonTextColor, Color.Black, new Vector2(10, 0),
+                HorizontalAlignment.Left, VerticalAlignment.Top);
 
             m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
             AddComponentNoUpdate(m_Crosshair);

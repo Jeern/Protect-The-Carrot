@@ -31,16 +31,13 @@ namespace PTC.Scenes
             base.LoadContent();
             m_BackGround = new WelcomeBackground(ThisGame, Vector2.Zero);
             AddComponent(m_BackGround);
-            m_Title = new TextUtil(ThisGame,FontLarge, Color.Violet, Color.Black, new Vector2(0, -200),
-                HorizontalAlignment.Center, VerticalAlignment.Center,
-                "Game Over", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
+            m_Title = new TextUtil(ThisGame, Vector2.Zero, FontLarge, Color.Violet, Color.Black, new Vector2(0, -200),
+                HorizontalAlignment.Center, VerticalAlignment.Center);
+            m_Title.SetText("Game Over", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
             AddComponent(m_Title);
-            m_Credits = new TextUtil(ThisGame, 14, 30, new Vector2(0, -0.6F), false, true,
-                FontMedium, Color.Gray, Color.Black, new Vector2(0, 150),
-                HorizontalAlignment.Center,
-                VerticalAlignment.Center, "Credits",
-                "Mathias Flohr - Graphics", "Jakob Krarup - Code", "Ulrik Müller - Audio Design",
-                "Jesper Niedermann - Code", "Lars Nysom - Producer", "Jakob Randa - Code");
+            //TODO: Viewbox
+            m_Credits = new TextUtil(ThisGame, new Rectangle(0, 290, 1024, 460), new Vector2(0, -0.6F), FontMedium, 
+                Color.Gray, Color.Black, new Vector2(0, 780), HorizontalAlignment.Center, VerticalAlignment.Center);
             AddComponent(m_Credits);
         }
 

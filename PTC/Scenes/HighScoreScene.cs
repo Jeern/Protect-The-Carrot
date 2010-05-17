@@ -12,7 +12,7 @@ namespace PTC.Scenes
         private WelcomeBackground m_BackGround;
         private TextUtil m_Title;
         private TextUtil m_ChosenText;
-        private const string m_ChosenTextStart = "________________________";
+        private const string m_ChosenTextStart =  "________________________";
         private string m_CurrentText = string.Empty;
 
         private Crosshair m_Crosshair;
@@ -44,13 +44,12 @@ namespace PTC.Scenes
             base.LoadContent();
             m_BackGround = new WelcomeBackground(ThisGame, Vector2.Zero);
             AddComponent(m_BackGround);
-            m_Title = new TextUtil(ThisGame, FontLarge, Color.Violet, Color.Black, new Vector2(0, -200),
-                HorizontalAlignment.Center, VerticalAlignment.Center,
-                "New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
+            m_Title = new TextUtil(ThisGame, Vector2.Zero, FontLarge, Color.Violet, Color.Black, new Vector2(0, -200),
+                HorizontalAlignment.Center, VerticalAlignment.Center);
+            m_Title.SetText("New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
             AddComponent(m_Title);
-            m_ChosenText = new TextUtil(ThisGame, FontMedium, Color.Black, Color.Blue, new Vector2(0, -70),
-                HorizontalAlignment.Center, VerticalAlignment.Center,
-                ChosenText);
+            m_ChosenText = new TextUtil(ThisGame, Vector2.Zero, FontMedium, Color.Black, Color.Blue, new Vector2(0, -70),
+                HorizontalAlignment.Center, VerticalAlignment.Center);
             AddComponent(m_ChosenText);
             MakeLetterMesh(new Vector2(200, 350));
             m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
