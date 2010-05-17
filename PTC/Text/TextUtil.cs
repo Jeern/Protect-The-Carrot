@@ -14,62 +14,52 @@ namespace PTC.Text
         private Vector2 m_Offset;
         private HorizontalAlignment m_HAlign;
         private VerticalAlignment m_VAlign;
-        private string[] m_Texts;
+        private string[] m_Texts = null;
 
-        private Rectangle m_View = Rectangle.Empty;
+        private Rectangle m_ViewBox = Rectangle.Empty;
         private Resetable<Vector2> m_CurrentScrollPosition = new Resetable<Vector2>();
         private Vector2 m_ScrollSpeed;
-        private bool m_Repeating = false;
         private bool m_UseShadow = false;
-        private int m_ScrollboxWidth = 0; //Width of the Box measured in X's in the current font
-        private int m_ScrollboxHeight = 0; //Height of the Box measured in X's in the current font
         private float m_TextHeight;
         private float m_TextWidth;
+        private float m_GameWidth = 0F;
+        private float m_GameHeight = 0F;
 
-        public TextUtil(PTCGame game, SpriteFont font,
-            Color color, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va, params string[] texts) : base(game)
+        public TextUtil(PTCGame game, Vector2 scrollSpeed, SpriteFont font,
+            Color color, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va) : base(game)
         {
+            m_ScrollSpeed = scrollSpeed;
             m_Font = font;
             m_Color = color;
             m_Offset = offset;
             m_HAlign = ha;
             m_VAlign = va;
-            m_Texts = texts;
-            m_TextHeight = TextHeight(font, texts);
-            m_TextWidth = TextWidth(font, texts);
+            m_CurrentScrollPosition.Value = Vector2.Zero;
+            m_CurrentScrollPosition.Set();
+            m_GameHeight = ThisGame.GraphicsDevice.Viewport.Height;
+            m_GameWidth = ThisGame.GraphicsDevice.Viewport.Width;
         }
 
-        public TextUtil(PTCGame game, int scrollBoxHeight, int scrollBoxWidth, Vector2 scrollSpeed, bool repeating, bool startOusideScrollbox, 
-            SpriteFont font, Color color, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va, params string[] texts)
-            : this(game, font, color, offset, ha, va, texts)
+        public TextUtil(PTCGame game, Rectangle viewBox, Vector2 scrollSpeed, SpriteFont font, Color color, Vector2 offset, 
+            HorizontalAlignment ha, VerticalAlignment va)
+            : this(game, scrollSpeed, font, color, offset, ha, va)
         {
-            m_View = GetView(scrollBoxHeight, scrollBoxWidth, font, ha, va, offset, texts);
-            m_Offset.X -= m_View.X;
-            m_Offset.Y -= m_View.Y;
-            if (startOusideScrollbox)
-            {
-                m_CurrentScrollPosition.Value = StartOutsideScrollbox(m_View, m_CurrentScrollPosition.Value, scrollSpeed);
-                m_CurrentScrollPosition.Set();
-            }
-            m_ScrollSpeed = scrollSpeed;
-            m_Repeating = repeating;
-            m_ScrollboxHeight = scrollBoxHeight;
-            m_ScrollboxWidth = scrollBoxWidth;
+            m_ViewBox = viewBox;
+            m_Offset.X -= viewBox.X;
+            m_Offset.Y -= viewBox.Y;
         }
 
-        public TextUtil(PTCGame game, SpriteFont font,
-            Color color, Color shadowColor, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va,
-            params string[] texts)
-            : this(game, font, color, offset, ha, va, texts)
+        public TextUtil(PTCGame game, Vector2 scrollSpeed, SpriteFont font, Color color, Color shadowColor, Vector2 offset, 
+            HorizontalAlignment ha, VerticalAlignment va)
+            : this(game, scrollSpeed, font, color, offset, ha, va)
         {
             m_ShadowColor = shadowColor;
             m_UseShadow = true;
         }
 
-        public TextUtil(PTCGame game, int scrollBoxHeight, int scrollBoxWidth, Vector2 scrollSpeed, bool repeating, bool startOusideScrollbox, SpriteFont font,
-            Color color, Color shadowColor, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va,
-            params string[] texts)
-            : this(game, scrollBoxHeight, scrollBoxWidth, scrollSpeed, repeating, startOusideScrollbox, font, color, offset, ha, va, texts)
+        public TextUtil(PTCGame game, Rectangle viewBox, Vector2 scrollSpeed, SpriteFont font,
+            Color color, Color shadowColor, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va)
+            : this(game, viewBox, scrollSpeed, font, color, offset, ha, va)
         {
             m_ShadowColor = shadowColor;
             m_UseShadow = true;
@@ -80,40 +70,7 @@ namespace PTC.Text
             m_CurrentScrollPosition.Reset();
         }
 
-        private Vector2 StartOutsideScrollbox(Rectangle scrollBox, Vector2 currentOffset, Vector2 scrollSpeed)
-        {
-            var scrollBoxVector = new Vector2(scrollBox.Width, scrollBox.Height);
-            //The antiSpeedUnitVector represents the opposite direction of the speed vector, but expressed as -1,0,1 in each direction.
-            //To be used for multiplying with the scrollBoxVector
-            var antiSpeedUnitVector = new Vector2(-Math.Sign(scrollSpeed.X), -Math.Sign(scrollSpeed.Y));
-            return currentOffset + scrollBoxVector * antiSpeedUnitVector;
-        }
-
-        private Rectangle GetView(int scrollBoxHeight, int scrollBoxWidth, SpriteFont font, 
-            HorizontalAlignment ha, VerticalAlignment va, Vector2 offSet, string[] texts)
-        {
-            Vector2 startPos = GetTopLeftMostPosition(font, ha, va, offSet, texts);
-            Vector2 measure = font.MeasureString("X");
-            return new Rectangle((int)startPos.X, (int)startPos.Y, (int)(measure.X * scrollBoxWidth), (int)(measure.Y * scrollBoxHeight));  
-        }
-
-        private Vector2 GetTopLeftMostPosition(SpriteFont font, HorizontalAlignment ha, VerticalAlignment va, Vector2 offSet, params string[] texts)
-        {
-            Vector2 pos = new Vector2(float.MaxValue);
-            foreach (Vector2 position in GetPositions(font, ha, va, texts))
-            {
-                if (pos.X > position.X)
-                {
-                    pos.X = position.X;
-                }
-
-                if (pos.Y > position.Y)
-                {
-                    pos.Y = position.Y;
-                }
-            }
-            return pos + offSet;
-        }
+        public bool Repeating { get; set; }
 
         public PTCGame ThisGame
         {
@@ -135,28 +92,31 @@ namespace PTC.Text
         
         private void Write(SpriteFont font, Color color, Vector2 offset, HorizontalAlignment ha, VerticalAlignment va, params string[] texts)
         {
+            if (texts == null)
+                return;
+
             int index = 0;
             foreach (Vector2 pos in GetPositions(font, ha, va, texts))
             {
                 Viewport savedViewport = new Viewport();
-                if (m_View != Rectangle.Empty)
+                if (m_ViewBox != Rectangle.Empty)
                 {
                     ThisGame.CurrentSpriteBatch.End();
                     ThisGame.CurrentSpriteBatch.Begin();
                     savedViewport = ThisGame.GraphicsDevice.Viewport;
                     Viewport currentViewPort = ThisGame.GraphicsDevice.Viewport;
-                    currentViewPort.Width = m_View.Width;
-                    currentViewPort.Height = m_View.Height;
-                    currentViewPort.X = m_View.X;
-                    currentViewPort.Y = m_View.Y;
+                    currentViewPort.Width = m_ViewBox.Width;
+                    currentViewPort.Height = m_ViewBox.Height;
+                    currentViewPort.X = m_ViewBox.X;
+                    currentViewPort.Y = m_ViewBox.Y;
                     ThisGame.GraphicsDevice.Viewport = currentViewPort;
                 }
 
-                m_PositionTopLeft = pos + offset + m_CurrentScrollPosition;
+                m_PositionTopLeft = pos + offset + m_CurrentScrollPosition; // +new Vector2(100F, 0F);
                 ThisGame.CurrentSpriteBatch.DrawString(font, texts[index], m_PositionTopLeft, color, 0F, Vector2.Zero,
                     Vector2.One, SpriteEffects.None, 0F);
 
-                if (m_View != Rectangle.Empty)
+                if (m_ViewBox != Rectangle.Empty)
                 {
                     ThisGame.CurrentSpriteBatch.End();
                     ThisGame.CurrentSpriteBatch.Begin();
@@ -186,20 +146,20 @@ namespace PTC.Text
 
         private void CheckBounds()
         {
-            if (!m_Repeating)
+            if (!Repeating)
                 return;
 
-            if (m_CurrentScrollPosition.Value.X > m_View.Width)
+            if (m_CurrentScrollPosition.Value.X > m_ViewBox.Width)
                 m_CurrentScrollPosition.Value.X = -m_TextWidth;
 
-            if (m_CurrentScrollPosition.Value.Y > m_View.Height)
-                m_CurrentScrollPosition.Value.Y = -m_View.Height;
+            if (m_CurrentScrollPosition.Value.Y > m_ViewBox.Height)
+                m_CurrentScrollPosition.Value.Y = -m_ViewBox.Height;
 
             if (m_CurrentScrollPosition.Value.X < -m_TextWidth)
-                m_CurrentScrollPosition.Value.X = m_View.Width;
+                m_CurrentScrollPosition.Value.X = m_ViewBox.Width;
 
             if (m_CurrentScrollPosition.Value.Y < -m_TextHeight)
-                m_CurrentScrollPosition.Value.Y = m_View.Height;
+                m_CurrentScrollPosition.Value.Y = m_ViewBox.Height;
         }
 
         private IEnumerable<Vector2> GetPositions(SpriteFont font, HorizontalAlignment ha, VerticalAlignment va, params string[] texts)
@@ -256,7 +216,7 @@ namespace PTC.Text
         {
             get
             {
-                return ThisGame.GraphicsDevice.Viewport.Width;
+                return m_GameWidth;
             }
         }
 
@@ -264,7 +224,7 @@ namespace PTC.Text
         {
             get
             {
-                return ThisGame.GraphicsDevice.Viewport.Height;
+                return m_GameHeight;
             }
         }
 
