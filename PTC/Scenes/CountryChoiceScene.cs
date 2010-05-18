@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using PTC.Sprites;
 using PTC.Text;
+using Microsoft.Xna.Framework;
 using PTC.Utils;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PTC.Scenes
 {
-    public class HighScoreScene : Scene
+    public class CountryChoiceScene : Scene
     {
         private WelcomeBackground m_BackGround;
         private TextUtil m_Title;
         private TextUtil m_ChosenText;
-        private TextUtil m_CountryText;
-        private const string m_ChosenTextStart = "________________________";
+        private const string m_ChosenTextStart =  "________________________";
         private string m_CurrentText = string.Empty;
 
         private Crosshair m_Crosshair;
@@ -22,7 +24,7 @@ namespace PTC.Scenes
 
         private List<HighscoreLetter> m_Letters = new List<HighscoreLetter>(30);
 
-        public HighScoreScene(Game game)
+        public CountryChoiceScene(Game game)
             : base(game)
         {
 
@@ -30,14 +32,19 @@ namespace PTC.Scenes
 
         public override void OnEnter()
         {
-            m_Title.SetText("New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
-            m_CountryText.SetText(string.Format("From {0}", ThisGame.Highscores.Country));
-            m_CurrentText = ThisGame.Highscores.LatestHighscoreHolder;
+            if (ThisGame.Highscores.Country == PTC.Utils.Environment.NoCountryName)
+            {
+                m_CurrentText = string.Empty;
+            }
+            else
+            {
+                m_CurrentText = ThisGame.Highscores.Country;
+            }
         }
 
         public override void OnExit()
         {
-            ThisGame.Highscores.Add(new HighScore() { Score = ThisGame.CurrentPoints, Name = m_CurrentText, Country = ThisGame.Highscores.Country });
+            ThisGame.Highscores.Country = m_CurrentText;
             ThisGame.Highscores.Save();
         }
 
@@ -46,17 +53,14 @@ namespace PTC.Scenes
             base.LoadContent();
             m_BackGround = new WelcomeBackground(ThisGame, Vector2.Zero);
             AddComponent(m_BackGround);
-            m_Title = new TextUtil(ThisGame, Vector2.Zero, FontLarge, Color.Violet, Color.Black, new Vector2(0, -200),
+            m_Title = new TextUtil(ThisGame, Vector2.Zero, FontMedium, Color.Violet, Color.Black, new Vector2(0, -200),
                 HorizontalAlignment.Center, VerticalAlignment.Center);
-            m_Title.SetText("New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
+            m_Title.SetText("Enter name of your home country");
             AddComponent(m_Title);
             m_ChosenText = new TextUtil(ThisGame, Vector2.Zero, FontMedium, Color.Black, Color.Blue, new Vector2(0, -70),
                 HorizontalAlignment.Center, VerticalAlignment.Center);
             AddComponent(m_ChosenText);
-            m_CountryText = new TextUtil(ThisGame, Vector2.Zero, FontMedium, Color.Black, Color.Blue, new Vector2(0, -25),
-                HorizontalAlignment.Center, VerticalAlignment.Center);
-            AddComponent(m_CountryText);
-            MakeLetterMesh(new Vector2(200, 395));
+            MakeLetterMesh(new Vector2(200, 350));
             m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
             AddComponent(m_Crosshair);
             m_Crosshair.GunFired += CrosshairGunFired;
@@ -123,7 +127,6 @@ namespace PTC.Scenes
             m_BackGround.Draw(gameTime);
             m_Title.Draw(gameTime);
             m_ChosenText.Draw(gameTime);
-            m_CountryText.Draw(gameTime);
             foreach (var letter in m_Letters)
             {
                 letter.Draw(gameTime);
