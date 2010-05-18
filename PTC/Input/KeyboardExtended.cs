@@ -87,12 +87,22 @@ namespace PTC.Input
 
         public bool WasSingleClick(Keys checkKey)
         {
-            return ClickCount(checkKey, 1);
+            bool clicked = ClickCount(checkKey, 1);
+            if (clicked)
+            {
+                FlushAllStates();
+            }
+            return clicked;
         }
 
         public bool WasDoubleClick(Keys checkKey)
         {
-            return ClickCount(checkKey, 2);
+            bool clicked = ClickCount(checkKey, 2);
+            if (clicked)
+            {
+                FlushAllStates();
+            }
+            return clicked;
         }
     }
 }

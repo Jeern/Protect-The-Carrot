@@ -15,7 +15,7 @@ namespace PTC.Utils
         private const int Number = 10;
         private List<HighScore> m_Scores = new List<HighScore>(Number);
 
-        private const string File = @"PTCHighScoreD8C310B266204dd4B69EF0A65FCDF716.bin";
+        private const string File = @"PTCHighScoreDDDF4D75A5A946a7992AB0BFCD290836.bin";
 
         private string m_LatestHighscoreHolder;
         public string LatestHighscoreHolder
@@ -23,6 +23,12 @@ namespace PTC.Utils
             get { return m_LatestHighscoreHolder; }
         }
 
+        private string m_Country = Environment.NoCountryName;
+        public string Country
+        {
+            get { return m_Country; }
+            set { m_Country = value; }
+        }
 
         public void Add(HighScore highScore)
         {

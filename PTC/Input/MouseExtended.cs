@@ -69,12 +69,22 @@ namespace PTC.Input
 
         public bool WasSingleClick(MouseButton checkButton)
         {
-            return(ClickCount(checkButton, 1));
+            bool clicked = ClickCount(checkButton, 1);
+            if (clicked)
+            {
+                FlushAllStates();
+            }
+            return clicked;
         }
 
         public bool WasDoubleClick(MouseButton checkButton)
         {
-            return (ClickCount(checkButton, 2));
+            bool clicked = ClickCount(checkButton, 2);
+            if (clicked)
+            {
+                FlushAllStates();
+            }
+            return clicked;
         }
 
     }

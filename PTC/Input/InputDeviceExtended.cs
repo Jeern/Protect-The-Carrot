@@ -68,5 +68,17 @@ namespace PTC.Input
                 return new InputStateExtended<S>(time, state);
             }
         }
+
+        /// <summary>
+        /// Deletes all the states in the queue and adds them to the reuse stack.
+        /// Used when a Click event or similar succeededs to stop another click event to occur immediately after.
+        /// </summary>
+        protected void FlushAllStates()
+        {
+            while (m_RecordedStates.Count > 0)
+            {
+                m_StatesForReuse.Push(m_RecordedStates.Dequeue());
+            }
+        }
     }
 }
