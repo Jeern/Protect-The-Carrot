@@ -66,6 +66,7 @@ namespace PTC
         GameOverScene m_GameOverScene;
         WelcomeScene m_WelcomeScene;
         HighScoreScene m_HighScoreScene;
+        CountryChoiceScene m_CompulsoryCountryChoiceScene;
         CountryChoiceScene m_CountryChoiceScene;
 
 
@@ -82,13 +83,16 @@ namespace PTC
             m_GameOverScene = new GameOverScene(this);
             m_WelcomeScene = new WelcomeScene(this);
             m_HighScoreScene = new HighScoreScene(this);
+            m_CompulsoryCountryChoiceScene = new CountryChoiceScene(this);
             m_CountryChoiceScene = new CountryChoiceScene(this);
 
             m_Scheduler.AddSceneChange(new SceneChange(m_WelcomeScene, m_MainScene, CommandConditions.ChangeFromWelcomeToMainScene));
-            m_Scheduler.AddSceneChange(new SceneChange(m_WelcomeScene, m_CountryChoiceScene, CommandConditions.ChangeFromWelcomeToCountryChoiceScene));
-            m_Scheduler.AddSceneChange(new SceneChange(m_CountryChoiceScene, m_MainScene, m_CountryChoiceScene.Finished));
+            m_Scheduler.AddSceneChange(new SceneChange(m_WelcomeScene, m_CompulsoryCountryChoiceScene, CommandConditions.ChangeFromWelcomeToCountryChoiceScene));
+            m_Scheduler.AddSceneChange(new SceneChange(m_CompulsoryCountryChoiceScene, m_MainScene, m_CompulsoryCountryChoiceScene.Finished));
             m_Scheduler.AddSceneChange(new SceneChange(m_MainScene, m_HighScoreScene, time => CommandConditions.GameOverCheatCode(time) || (m_MainScene.IsGameOver() && Highscores.IsNewHighscore(CurrentPoints))));
             m_Scheduler.AddSceneChange(new SceneChange(m_MainScene, m_GameOverScene, time => m_MainScene.IsGameOver() && !Highscores.IsNewHighscore(CurrentPoints)));
+            m_Scheduler.AddSceneChange(new SceneChange(m_HighScoreScene, m_CountryChoiceScene, m_HighScoreScene.CountryClicked));
+            m_Scheduler.AddSceneChange(new SceneChange(m_CountryChoiceScene, m_HighScoreScene, m_CountryChoiceScene.Finished));
             m_Scheduler.AddSceneChange(new SceneChange(m_HighScoreScene, m_GameOverScene, m_HighScoreScene.Finished));
             m_Scheduler.AddSceneChange(new SceneChange(m_GameOverScene, m_WelcomeScene, CommandConditions.ChangeFromGameOverToWelcomeScene));    
 
@@ -96,6 +100,7 @@ namespace PTC
             Components.Add(m_GameOverScene);
             Components.Add(m_HighScoreScene);
             Components.Add(m_WelcomeScene);
+            Components.Add(m_CompulsoryCountryChoiceScene);
             Components.Add(m_CountryChoiceScene);
             Components.Add(m_Scheduler);
             Components.Add(new Command(CommandNames.Exit, CommandConditions.Exit, CommandActions.Exit, this));

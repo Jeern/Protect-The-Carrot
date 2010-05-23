@@ -23,6 +23,7 @@ namespace PTC.Scenes
         private Crosshair m_Crosshair;
 
         private bool m_Finished = false;
+        private bool m_CountryClicked = false;
 
         private List<HighscoreLetter> m_Letters = new List<HighscoreLetter>(30);
 
@@ -76,7 +77,7 @@ namespace PTC.Scenes
 
         private void CountryAreaClicked(object sender, System.EventArgs e)
         {
-            Debug.WriteLine("Area clicked");
+            m_CountryClicked = true;
         }
 
         private void MakeLetterMesh(Vector2 offset)
@@ -185,6 +186,16 @@ namespace PTC.Scenes
         public bool Finished(GameTime time)
         {
             return m_Finished;
+        }
+
+        public bool CountryClicked(GameTime time)
+        {
+            if (m_CountryClicked)
+            {
+                m_CountryClicked = false;
+                return true;
+            }
+            return false;
         }
 
         private void ChangeText(HighscoreLetter letter)
