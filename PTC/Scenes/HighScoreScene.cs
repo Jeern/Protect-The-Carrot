@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using PTC.Sprites;
 using PTC.Text;
 using PTC.Utils;
+using PTC.Input;
+using System.Diagnostics;
 
 namespace PTC.Scenes
 {
@@ -13,6 +15,8 @@ namespace PTC.Scenes
         private TextUtil m_Title;
         private TextUtil m_ChosenText;
         private TextUtil m_CountryText;
+        private TextUtil m_Explanation;
+        private ClickableArea m_CountryArea;
         private const string m_ChosenTextStart = "________________________";
         private string m_CurrentText = string.Empty;
 
@@ -32,7 +36,9 @@ namespace PTC.Scenes
         {
             m_Title.SetText("New Highscore", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
             m_CountryText.SetText(string.Format("From {0}", ThisGame.Highscores.Country));
+            //m_CountryArea.SetArea(m_CountryText.Area);
             m_CurrentText = ThisGame.Highscores.LatestHighscoreHolder;
+            m_Explanation.SetText("<- Click to change");
         }
 
         public override void OnExit()
@@ -56,11 +62,21 @@ namespace PTC.Scenes
             m_CountryText = new TextUtil(ThisGame, Vector2.Zero, FontMedium, Color.Black, Color.Blue, new Vector2(0, -25),
                 HorizontalAlignment.Center, VerticalAlignment.Center);
             AddComponent(m_CountryText);
+            m_Explanation = new TextUtil(ThisGame, Vector2.Zero, FontSmall, Color.Yellow, Color.Blue, new Vector2(700, 360),
+                HorizontalAlignment.Left, VerticalAlignment.Top);
+            AddComponent(m_Explanation);
             MakeLetterMesh(new Vector2(200, 395));
             m_Crosshair = new Crosshair(ThisGame, new Vector2(50, 50));
             AddComponent(m_Crosshair);
             m_Crosshair.GunFired += CrosshairGunFired;
+            m_CountryArea = new ClickableArea(ThisGame);
+            AddComponent(m_CountryArea);
+            m_CountryArea.AreaClicked += CountryAreaClicked;
+        }
 
+        private void CountryAreaClicked(object sender, System.EventArgs e)
+        {
+            Debug.WriteLine("Area clicked");
         }
 
         private void MakeLetterMesh(Vector2 offset)
@@ -124,6 +140,7 @@ namespace PTC.Scenes
             m_Title.Draw(gameTime);
             m_ChosenText.Draw(gameTime);
             m_CountryText.Draw(gameTime);
+            m_Explanation.Draw(gameTime);
             foreach (var letter in m_Letters)
             {
                 letter.Draw(gameTime);
@@ -135,7 +152,14 @@ namespace PTC.Scenes
         {
             base.Update(gameTime);
             m_ChosenText.SetText(ChosenText);
+            if (!m_IsCountryAreaSet && m_CountryText.IsAreaReady)
+            {
+                m_IsCountryAreaSet = true;
+                m_CountryArea.SetArea(m_CountryText.Area);                
+            }
         }
+
+        private bool m_IsCountryAreaSet = false;
 
         public void DrawCrossHair(GameTime time)
         {
@@ -178,6 +202,7 @@ namespace PTC.Scenes
                     break;
                 case "ENTER":
                     m_Finished = true;
+                    MouseExtended.Current.Reset();
                     break;
                 case "SPACE":
                     m_CurrentText += " ";

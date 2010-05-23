@@ -112,6 +112,7 @@
     <Compile Include="Commands\CommandActions.cs" />
     <Compile Include="Commands\CommandConditions.cs" />
     <Compile Include="Commands\CommandNames.cs" />
+    <Compile Include="Utils\ClickableArea.cs" />
     <Compile Include="Utils\Environment.cs" />
     <Compile Include="Input\GamepadExtended.cs" />
     <Compile Include="Input\InputDeviceConstants.cs" />
