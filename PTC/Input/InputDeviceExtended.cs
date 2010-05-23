@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using System.Diagnostics;
 
 namespace PTC.Input
 {
@@ -73,12 +74,17 @@ namespace PTC.Input
         /// Deletes all the states in the queue and adds them to the reuse stack.
         /// Used when a Click event or similar succeededs to stop another click event to occur immediately after.
         /// </summary>
-        protected void FlushAllStates()
+        private void FlushAllStates()
         {
             while (m_RecordedStates.Count > 0)
             {
                 m_StatesForReuse.Push(m_RecordedStates.Dequeue());
             }
+        }
+
+        public void Reset()
+        {
+            FlushAllStates();
         }
     }
 }

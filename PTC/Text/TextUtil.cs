@@ -113,6 +113,8 @@ namespace PTC.Text
                 }
 
                 m_PositionTopLeft = pos + offset + m_CurrentScrollPosition; // +new Vector2(100F, 0F);
+                m_IsAreaSet = true;
+
                 ThisGame.CurrentSpriteBatch.DrawString(font, texts[index], m_PositionTopLeft, color, 0F, Vector2.Zero,
                     Vector2.One, SpriteEffects.None, 0F);
 
@@ -127,7 +129,7 @@ namespace PTC.Text
             }
         }
 
-        private Vector2 m_PositionTopLeft;
+        private Vector2 m_PositionTopLeft = new Vector2(100);
         protected Vector2 PositionTopLeft
         {
             get { return m_PositionTopLeft; }
@@ -262,6 +264,27 @@ namespace PTC.Text
                 return font.MeasureString("X").Y;
 
             return font.MeasureString(text).Y;
+        }
+
+        private Rectangle m_Area = Rectangle.Empty;
+
+        public Rectangle Area
+        {
+            get 
+            {
+                if (m_Area == Rectangle.Empty)
+                {
+                    m_Area = new Rectangle((int)PositionTopLeft.X, (int)PositionTopLeft.Y,
+                        (int)m_TextWidth, (int)m_TextHeight);
+                }
+                return m_Area;
+            }
+        }
+
+        private bool m_IsAreaSet = false;
+        public bool IsAreaReady
+        {
+            get { return m_IsAreaSet; }
         }
     }
 }

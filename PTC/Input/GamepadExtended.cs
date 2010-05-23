@@ -87,7 +87,10 @@ namespace PTC.Input
                 {
                     count++;
                     if (count >= requiredCount)
+                    {
+                        Reset();
                         return true;
+                    }
                 }
                 buttonWasDown = stateExt.State.IsButtonUp(checkButton);
             }
@@ -96,22 +99,12 @@ namespace PTC.Input
 
         public bool WasSingleClick(Buttons checkButton)
         {
-            bool clicked = ClickCount(checkButton, 1);
-            if (clicked)
-            {
-                FlushAllStates();
-            }
-            return clicked;
+            return ClickCount(checkButton, 1);
         }
 
         public bool WasDoubleClick(Buttons checkButton)
         {
-            bool clicked = ClickCount(checkButton, 2);
-            if (clicked)
-            {
-                FlushAllStates();
-            }
-            return clicked;
+            return ClickCount(checkButton, 2);
         }
     }
 }

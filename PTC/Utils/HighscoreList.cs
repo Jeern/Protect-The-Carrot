@@ -23,10 +23,15 @@ namespace PTC.Utils
             get { return m_LatestHighscoreHolder; }
         }
 
-        private string m_Country = Environment.NoCountryName;
+        private string m_Country = string.Empty;
         public string Country
         {
-            get { return m_Country; }
+            get 
+            {
+                if (string.IsNullOrEmpty(m_Country))
+                    return Environment.NoCountryName;
+                return m_Country; 
+            }
             set { m_Country = value; }
         }
 

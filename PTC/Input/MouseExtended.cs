@@ -41,7 +41,10 @@ namespace PTC.Input
                 {
                     count++;
                     if (count >= requiredCount)
+                    {
+                        Reset();
                         return true;
+                    }
                 }
                 found = ButtonStateToCheck(stateExt.State, checkButton);
             }
@@ -69,22 +72,12 @@ namespace PTC.Input
 
         public bool WasSingleClick(MouseButton checkButton)
         {
-            bool clicked = ClickCount(checkButton, 1);
-            if (clicked)
-            {
-                FlushAllStates();
-            }
-            return clicked;
+            return ClickCount(checkButton, 1);
         }
 
         public bool WasDoubleClick(MouseButton checkButton)
         {
-            bool clicked = ClickCount(checkButton, 2);
-            if (clicked)
-            {
-                FlushAllStates();
-            }
-            return clicked;
+            return ClickCount(checkButton, 2);
         }
 
     }
