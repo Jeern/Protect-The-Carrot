@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Web;
 using System.Runtime.Serialization;
 
 namespace PTC.Utils
 {
-    [Serializable]
     [DataContract]
-    public class HighScore
+    public class KeyInfo
     {
         [DataMember]
-        public int Score { get; set; }
+        public string Key { get; set; }
         [DataMember]
-        public string Name { get; set; }
-        [DataMember]
-        public string Country { get; set; }
+        public Guid Id { get; set; }
     }
 }
