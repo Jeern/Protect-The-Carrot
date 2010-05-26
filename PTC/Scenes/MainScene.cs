@@ -127,9 +127,8 @@ namespace PTC.Scenes
             }
         }
 
-        void spawnTimer_TimesUp(object sender, EventArgs e)
+        private void SpawnTimerTimesUp(object sender, EventArgs e)
         {
-            Debug.WriteLine(DateTime.Now);
             AddRabbit();
         }
 
@@ -389,7 +388,15 @@ namespace PTC.Scenes
             RemoveOldBlood(gameTime);
             m_TextPoints.SetText(string.Format("Points: {0}", ThisGame.CurrentPoints));
             m_TextSeason.SetText(season.ToString());
+            //if (!DoOnce)
+            //{
+            //    DoOnce = true;
+            //    var client = new HighScoreProxy.HighScoreServiceClient();
+            //    m_TextSeason.SetText(client.GetPublicKey().Key);
+            //}
         }
+
+        //private bool DoOnce = false;
 
         private void UpdateAllComponents(GameTime time)
         {
@@ -658,7 +665,7 @@ namespace PTC.Scenes
             {
                 spawnTimer = new Timer(ThisGame, 800);
                 spawnTimer.Repeat = true;
-                spawnTimer.TimesUp += spawnTimer_TimesUp;
+                spawnTimer.TimesUp += SpawnTimerTimesUp;
                 this.AddComponentNoUpdate(spawnTimer);
             }
 
