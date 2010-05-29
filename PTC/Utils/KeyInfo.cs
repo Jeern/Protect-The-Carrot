@@ -11,7 +11,5 @@ namespace PTC.Utils
     {
         [DataMember]
         public string Key { get; set; }
-        [DataMember]
-        public Guid Id { get; set; }
     }
 }
