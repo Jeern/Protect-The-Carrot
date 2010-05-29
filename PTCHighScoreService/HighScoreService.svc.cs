@@ -7,6 +7,9 @@ using System.Text;
 using PTC.Utils;
 using PTC.Util;
 using PTCHighScoreService.Encryption;
+using System.IO;
+using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace PTCHighScoreService
 {
@@ -16,19 +19,63 @@ namespace PTCHighScoreService
         {
             var info = new KeyInfo();
             var enc = new Encrypter();
-            info.Id = Guid.NewGuid();
             info.Key = enc.PublicKey;
             return info;
         }
 
-        public void Submit(Guid Id, PTC.Utils.HighScore highScore)
+        public void Submit(string highScore)
         {
-            throw new NotImplementedException();
+            bool save = false;
+            HighScore score = new HighScore();
+            score.FromString(new Encrypter().Decrypt(highScore));
+            List<HighScore> scores = GetCurrentHighScores();
+            if (scores.Count < 10)
+            {
+                scores.Add(score);
+                save = true;
+            }
+            else
+            {
+                if (score.Score > scores[9].Score)
+                {
+                    scores.Add(score);
+                    save = true;
+                }
+            }
+            if (save)
+            {
+                Save(scores);
+            }
+        }
+
+        private static readonly string FILE = Path.Combine(Directory.GetCurrentDirectory(), "Score.bin");
+
+        private void Save(List<HighScore> scores)
+        {
+            scores.Sort(new Comparison<HighScore>((score1, score2) => (score2.Score.CompareTo(score1.Score))));
+            while (scores.Count > 10)
+            {
+                scores.RemoveAt(10);
+            }
+
+            using (var stream = new FileStream(FILE, FileMode.OpenOrCreate))
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, scores);
+                stream.Flush();
+            }
         }
 
         public List<HighScore> GetCurrentHighScores()
         {
-            throw new NotImplementedException();
+            if (!File.Exists(FILE))
+                return new List<HighScore>();
+
+            using (var stream = new FileStream(FILE, FileMode.OpenOrCreate))
+            {
+                var formatter = new BinaryFormatter();
+                return formatter.Deserialize(stream) as List<HighScore>;
+            }
         }
     }
 }

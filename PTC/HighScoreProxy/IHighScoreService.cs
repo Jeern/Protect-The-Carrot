@@ -16,7 +16,7 @@ namespace PTC.Util
         KeyInfo GetPublicKey();
 
         [OperationContract]
-        void Submit(Guid Id, HighScore highScore);
+        void Submit(string highScore);
 
         [OperationContract]
         List<HighScore> GetCurrentHighScores();

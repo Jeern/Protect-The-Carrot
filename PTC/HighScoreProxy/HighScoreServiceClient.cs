@@ -22,14 +22,33 @@ namespace PTC.HighScoreProxy
             return Channel.GetPublicKey();
         }
 
-        public void Submit(Guid Id, HighScore highScore)
+        public void Submit(string highScore)
         {
-            Channel.Submit(Id, highScore);
+            Channel.Submit(highScore);
         }
 
         public List<HighScore> GetCurrentHighScores()
         {
             return Channel.GetCurrentHighScores();
+        }
+
+        public void Save(HighScore score)
+        {
+            Submit(new Encrypter().Encrypt(score.ToString(), PublicKey.Key));
+        }
+
+        private KeyInfo m_PublicKey;
+
+        private KeyInfo PublicKey
+        {
+            get
+            {
+                if (m_PublicKey == null)
+                {
+                    m_PublicKey = GetPublicKey();
+                }
+                return m_PublicKey;
+            }
         }
     }
 }
