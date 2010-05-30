@@ -7,6 +7,7 @@ using PTC.Utils;
 using PTC.Input;
 using System.Diagnostics;
 using PTC.HighScoreProxy;
+using System;
 
 namespace PTC.Scenes
 {
@@ -45,14 +46,18 @@ namespace PTC.Scenes
 
         public override void OnExit()
         {
-            var highScore = new HighScore() { Score = ThisGame.CurrentPoints, Name = m_CurrentText, Country = ThisGame.Highscores.Country };
-            //Save local Highscore
-            ThisGame.Highscores.Add(highScore);
-            ThisGame.Highscores.Save();
-            //Save global Highscore
-            var proxy = new HighScoreServiceClient();
-            proxy.Save(highScore);
-
+            //The If statement stops the highscore from being saved twice if the scene changes to 
+            //CountryChoiceScene first
+            if (SceneScheduler.NextScene is GameOverScene)
+            {
+                var highScore = new HighScore() { Score = ThisGame.CurrentPoints, Name = m_CurrentText, Country = ThisGame.Highscores.Country };
+                //Save local Highscore
+                ThisGame.Highscores.Add(highScore);
+                ThisGame.Highscores.Save();
+                //Save global Highscore
+                var proxy = new HighScoreServiceClient();
+                proxy.Save(highScore);
+            }
         }
 
         protected override void LoadContent()
@@ -179,6 +184,12 @@ namespace PTC.Scenes
 
         private void CrosshairGunFired(object sender, EventArgs<GameTime> e)
         {
+            //We only accept this if it has been at least 500 ms since the scene started.
+            //This is to stop the player from hitting letters from both country choice and Highscore scene
+            //at the same time.
+            if (StartTime.Add(new TimeSpan(0, 0, 0, 0, 500)) > e.Data.TotalRealTime)
+                return;
+
             foreach (HighscoreLetter letter in m_Letters)
             {
                 if ((m_Crosshair.Position - letter.Position).Length() < (letter.TouchDistance + m_Crosshair.TouchDistance))

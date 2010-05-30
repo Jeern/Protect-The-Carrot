@@ -150,6 +150,12 @@ namespace PTC.Scenes
 
         private void CrosshairGunFired(object sender, EventArgs<GameTime> e)
         {
+            //We only accept this if it has been at least 500 ms since the scene started.
+            //This is to stop the player from hitting letters from both country choice and Highscore scene
+            //at the same time.
+            if (StartTime.Add(new TimeSpan(0, 0, 0, 0, 500)) > e.Data.TotalRealTime)
+                return;
+
             foreach (HighscoreLetter letter in m_Letters)
             {
                 if ((m_Crosshair.Position - letter.Position).Length() < (letter.TouchDistance + m_Crosshair.TouchDistance))

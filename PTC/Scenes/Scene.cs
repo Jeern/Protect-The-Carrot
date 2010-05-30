@@ -115,5 +115,11 @@ namespace PTC.Scenes
         public virtual void OnExit()
         {
         }
+
+        public TimeSpan StartTime
+        {
+            get;
+            set;
+        }
     }
 }
