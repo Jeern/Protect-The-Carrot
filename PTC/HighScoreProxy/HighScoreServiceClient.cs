@@ -50,5 +50,16 @@ namespace PTC.HighScoreProxy
                 return m_PublicKey;
             }
         }
+
+        public IEnumerable<string> GetScores()
+        {
+            int i = 0;
+            List<HighScore> scores = GetCurrentHighScores();
+            foreach (HighScore score in scores)
+            {
+                i++;
+                yield return i.ToString() + ". " + score.Name + ", " + score.Country + "   " + score.Score.ToString() + " Points";
+            }
+        }
     }
 }
