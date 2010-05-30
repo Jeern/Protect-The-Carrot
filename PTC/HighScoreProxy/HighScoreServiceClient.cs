@@ -6,6 +6,7 @@ using PTC.Util;
 using System.ServiceModel;
 using PTC.Utils;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 
 namespace PTC.HighScoreProxy
 {
@@ -19,21 +20,53 @@ namespace PTC.HighScoreProxy
 
         public KeyInfo GetPublicKey()
         {
-            return Channel.GetPublicKey();
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return null;
+            try
+            {
+                return Channel.GetPublicKey();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public void Submit(string highScore)
         {
-            Channel.Submit(highScore);
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return;
+
+            try
+            {
+                Channel.Submit(highScore);
+            }
+            catch
+            {
+                return;
+            }
         }
 
         public List<HighScore> GetCurrentHighScores()
         {
-            return Channel.GetCurrentHighScores();
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return null;
+
+            try
+            {
+                return Channel.GetCurrentHighScores();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public void Save(HighScore score)
         {
+            if (PublicKey == null)
+                return;
+
             Submit(new Encrypter().Encrypt(score.ToString(), PublicKey.Key));
         }
 
@@ -55,10 +88,17 @@ namespace PTC.HighScoreProxy
         {
             int i = 0;
             List<HighScore> scores = GetCurrentHighScores();
-            foreach (HighScore score in scores)
+            if (scores == null)
             {
-                i++;
-                yield return i.ToString() + ". " + score.Name + ", " + score.Country + "   " + score.Score.ToString() + " Points";
+                yield return "NOT AVAILABLE";
+            }
+            else
+            {
+                foreach (HighScore score in scores)
+                {
+                    i++;
+                    yield return i.ToString() + ". " + score.Name + ", " + score.Country + "   " + score.Score.ToString() + " Points";
+                }
             }
         }
     }
