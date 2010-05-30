@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PTC.Sprites;
 using PTC.Text;
 using PTC.Utils;
+using PTC.HighScoreProxy;
 
 namespace PTC.Scenes
 {
@@ -36,7 +37,7 @@ namespace PTC.Scenes
             m_Title.SetText("Game Over", string.Format("You got {0} points", ThisGame.CurrentPoints.ToString()));
             AddComponent(m_Title);
             //TODO: Viewbox
-            m_Credits = new TextUtil(ThisGame, new Rectangle(0, 290, 1024, 460), new Vector2(0, -0.6F), FontMedium, 
+            m_Credits = new TextUtil(ThisGame, new Rectangle(0, 290, 1024, 460), new Vector2(0, -0.6F), FontMediumSmall, 
                 Color.Gray, Color.Black, new Vector2(0, 780), HorizontalAlignment.Center, VerticalAlignment.Center);
             AddComponent(m_Credits);
         }
@@ -50,7 +51,11 @@ namespace PTC.Scenes
         private List<string> GetCredits()
         {
             var credits = new List<string>();
-            credits.Add("Highscores");
+            var proxy = new HighScoreServiceClient();
+            credits.Add("Global Highscores");
+            credits.AddRange(proxy.GetScores());
+            credits.Add(string.Empty);
+            credits.Add("Local Highscores");
             credits.AddRange(ThisGame.Highscores.GetScores());
             credits.Add(string.Empty);
             credits.Add("Credits");

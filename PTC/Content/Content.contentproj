@@ -70,6 +70,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fonts\MediumSmall.spritefont">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>MediumSmall</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="XACT\PTC.xgs">
       <Name>PTC</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

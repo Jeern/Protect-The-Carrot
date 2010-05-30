@@ -6,6 +6,7 @@ using PTC.Text;
 using PTC.Utils;
 using PTC.Input;
 using System.Diagnostics;
+using PTC.HighScoreProxy;
 
 namespace PTC.Scenes
 {
@@ -44,8 +45,14 @@ namespace PTC.Scenes
 
         public override void OnExit()
         {
-            ThisGame.Highscores.Add(new HighScore() { Score = ThisGame.CurrentPoints, Name = m_CurrentText, Country = ThisGame.Highscores.Country });
+            var highScore = new HighScore() { Score = ThisGame.CurrentPoints, Name = m_CurrentText, Country = ThisGame.Highscores.Country };
+            //Save local Highscore
+            ThisGame.Highscores.Add(highScore);
             ThisGame.Highscores.Save();
+            //Save global Highscore
+            var proxy = new HighScoreServiceClient();
+            proxy.Save(highScore);
+
         }
 
         protected override void LoadContent()

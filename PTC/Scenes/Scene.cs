@@ -27,6 +27,7 @@ namespace PTC.Scenes
 
         private SpriteFont m_FontLarge;
         private SpriteFont m_FontMedium;
+        private SpriteFont m_FontMediumSmall;
         private SpriteFont m_FontSmall;
 
         protected SpriteFont FontLarge
@@ -37,6 +38,11 @@ namespace PTC.Scenes
         protected SpriteFont FontMedium
         {
             get { return m_FontMedium; }
+        }
+
+        protected SpriteFont FontMediumSmall
+        {
+            get { return m_FontMediumSmall; }
         }
 
         protected SpriteFont FontSmall
@@ -93,6 +99,7 @@ namespace PTC.Scenes
         {
             m_FontLarge = Game.Content.Load<SpriteFont>(@"Fonts\Large");
             m_FontMedium = Game.Content.Load<SpriteFont>(@"Fonts\Medium");
+            m_FontMediumSmall = Game.Content.Load<SpriteFont>(@"Fonts\MediumSmall");
             m_FontSmall = Game.Content.Load<SpriteFont>(@"Fonts\Small");
             base.LoadContent();
         }
