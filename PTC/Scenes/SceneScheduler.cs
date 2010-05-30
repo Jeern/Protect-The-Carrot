@@ -47,6 +47,15 @@ namespace PTC.Scenes
             }
         }
 
+        private static Scene m_NextScene;
+        public static Scene NextScene
+        {
+            get
+            {
+                return m_NextScene;
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -56,11 +65,13 @@ namespace PTC.Scenes
                 {
                     if (sc.ChangeNow(gameTime))
                     {
+                        m_NextScene = sc.To;
                         if (CurrentScene != null)
                         {
                             CurrentScene.OnExit();
                         }
-                        CurrentScene = sc.To;
+                        CurrentScene = m_NextScene;
+                        CurrentScene.StartTime = gameTime.TotalRealTime;
                         CurrentScene.Reset();
                         CurrentScene.OnEnter();
                     }

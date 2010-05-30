@@ -528,7 +528,6 @@ namespace PTC.Scenes
 
         private void CrosshairGunFired(object sender, EventArgs<GameTime> e)
         {
-            MouseExtended.Current.Reset();
             m_smokeParticleSystem.AddParticles(m_gun.Position);
             Rabbit rabbitToCheck = null;
             for (int i = m_Rabbits.Count - 1; i >= 0; i--)
