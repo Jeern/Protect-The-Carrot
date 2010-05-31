@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Encryption\Key.xml" />
+    <Content Include="HighScores.aspx" />
     <Content Include="HighScoreService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>

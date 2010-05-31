@@ -10,6 +10,8 @@ using PTCHighScoreService.Encryption;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
+using System.Web;
 
 namespace PTCHighScoreService
 {
@@ -48,7 +50,7 @@ namespace PTCHighScoreService
             }
         }
 
-        private static readonly string FILE = Path.Combine(Directory.GetCurrentDirectory(), "Score.bin");
+        private static readonly string FILE = Path.Combine(HttpRuntime.AppDomainAppPath, "Score.bin");
 
         private void Save(List<HighScore> scores)
         {

@@ -56,7 +56,7 @@ namespace PTC.HighScoreProxy
             {
                 return Channel.GetCurrentHighScores();
             }
-            catch
+            catch 
             {
                 return null;
             }
