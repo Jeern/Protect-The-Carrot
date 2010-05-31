@@ -9,6 +9,20 @@
     <form id="form1" runat="server">
     <div>
         <table>
+            <tr>
+                <td>
+                    Number
+                </td>
+                <td>
+                    Name
+                </td>
+                <td>
+                    Country
+                </td>
+                <td>
+                    Score
+                </td>
+            </tr>
             <% var highScore = new PTCHighScoreService.HighScoreService(); %>
             <% int i = 0; %>
             <% foreach (var score in highScore.GetCurrentHighScores())
@@ -16,7 +30,16 @@
             <tr>
                 <td>
                     <% i++; %>
-                    <%= i.ToString() + ". " + score.Name + ", " + score.Country + "   " + score.Score.ToString() + " Points" %>
+                    <%= i.ToString() %>
+                </td>
+                <td>
+                    <%= score.Name %>
+                </td>
+                <td>
+                    <%= score.Country %>
+                </td>
+                <td>
+                    <%= score.Score.ToString() %>
                 </td>
             </tr>
             <% } %>
